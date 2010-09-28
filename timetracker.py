@@ -19,13 +19,14 @@ def add(argv):
     DATA.append(entry)
 
 def show(argv):
-    print "show entrys"
+    for entry in DATA:
+        print "%-10s %-26s %-26s %s" %(entry['tag'], entry['begin'], entry['end'], entry['comment'])
 
 def delete(argv):
     print "delete entry"
 
 def help(argv):
-    print "timetracer - by core - 2010"
+    print "timetracker - by core - 2010"
     print
     print "pre alpha - more coming soon"
 
