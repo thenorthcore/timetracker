@@ -1,20 +1,48 @@
 #!/usr/bin/env python
 
 import datetime
+import getopt
 import json
 import os
 import os.path
 
 DB = os.environ['HOME'] + "/.timetracker/db.json"
 DATA = []
+DATEINPUTFORMAT = "%Y-%m-%d %H:%M"
 
 def add(argv):
     global DATA
-    print "adding entry"
-    entry = {'tag' : "testing", 
-             'begin' : datetime.datetime.today().isoformat(' '),
-             'end' : "end", 
-             'comment' : "comment" }
+    
+    shortoptions = 't:b:e:c:'
+    longoptions = ["tag", "begin", "end", "comment"]
+    
+    try:
+        opts, args = getopt.getopt(argv, shortoptions, longoptions)
+    except getopt.GetoptError, err:
+        print str(err)
+
+    tag = ""
+    begin = datetime.datetime.today().isoformat(' ')
+    end = datetime.datetime.today().isoformat(' ')
+    comment = ""
+
+    for o, a in opts:
+        if o in ("-t", "--tag"):
+            tag = a
+        elif o in ("-b", "--begin"):
+            begin = datetime.datetime.strptime(a, DATEINPUTFORMAT).isoformat(' ')
+        elif o in ("-e", "--end"):
+            end = datetime.datetime.strptime(a, DATEINPUTFORMAT).isoformat(' ')
+        elif o in ("-c", "--comment"):
+            comment = a
+        else:
+            print "unhandled option"
+
+
+    entry = {'tag' : tag, 
+             'begin' : begin,
+             'end' : end, 
+             'comment' : comment }
 
     DATA.append(entry)
 
@@ -27,7 +55,7 @@ def delete(argv):
 
 def help(argv):
     print "timetracker - by core - 2010"
-    print
+    print "timeformat " + DATEINPUTFORMAT 
     print "pre alpha - more coming soon"
 
 def load_json(io):
