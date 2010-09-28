@@ -9,6 +9,7 @@ import os.path
 DB = os.environ['HOME'] + "/.timetracker/db.json"
 DATA = []
 DATEINPUTFORMAT = "%Y-%m-%d %H:%M"
+DATEISOFORMAT = "%Y-%m-%d %H:%M:%S"
 
 def add(argv):
     global DATA
@@ -40,7 +41,6 @@ def add(argv):
             else:
                 print "unhandled option"
 
-
         entry = {'tag' : tag, 
                  'begin' : begin,
                  'end' : end, 
@@ -62,6 +62,11 @@ def help(argv):
     print "timeformat " + DATEINPUTFORMAT 
     print "pre alpha - more coming soon"
 
+def statistics(argv):
+    for entry in DATA:
+        time = datetime.datetime.strptime(entry['end'], DATEISOFORMAT) - datetime.datetime.strptime(entry['begin'], DATEISOFORMAT)
+        print "total time: " + str(time)
+
 def load_json(io):
     global DATA 
     DATA = json.load(io)
@@ -75,6 +80,7 @@ def main(argv):
         'show' : show,
         'delete' : delete,
         'help' : help,
+        'statistics' : statistics,
         }
 
     if len(argv):
