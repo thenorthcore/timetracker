@@ -21,30 +21,34 @@ def add(argv):
     except getopt.GetoptError, err:
         print str(err)
 
-    tag = ""
-    begin = datetime.datetime.today().isoformat(' ')
-    end = datetime.datetime.today().isoformat(' ')
-    comment = ""
+    if "-b" in argv and "-e" in argv:
 
-    for o, a in opts:
-        if o in ("-t", "--tag"):
-            tag = a
-        elif o in ("-b", "--begin"):
-            begin = datetime.datetime.strptime(a, DATEINPUTFORMAT).isoformat(' ')
-        elif o in ("-e", "--end"):
-            end = datetime.datetime.strptime(a, DATEINPUTFORMAT).isoformat(' ')
-        elif o in ("-c", "--comment"):
-            comment = a
-        else:
-            print "unhandled option"
+        tag = ""
+        begin = datetime.datetime.today().isoformat(' ')
+        end = datetime.datetime.today().isoformat(' ')
+        comment = ""
+
+        for o, a in opts:
+            if o in ("-t", "--tag"):
+                tag = a
+            elif o in ("-b", "--begin"):
+                begin = datetime.datetime.strptime(a, DATEINPUTFORMAT).isoformat(' ')
+            elif o in ("-e", "--end"):
+                end = datetime.datetime.strptime(a, DATEINPUTFORMAT).isoformat(' ')
+            elif o in ("-c", "--comment"):
+                comment = a
+            else:
+                print "unhandled option"
 
 
-    entry = {'tag' : tag, 
-             'begin' : begin,
-             'end' : end, 
-             'comment' : comment }
+        entry = {'tag' : tag, 
+                 'begin' : begin,
+                 'end' : end, 
+                 'comment' : comment }
 
-    DATA.append(entry)
+        DATA.append(entry)
+    else:
+        print "specify -b and -e option for begin and end of entry"
 
 def show(argv):
     for entry in DATA:
