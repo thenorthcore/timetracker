@@ -63,9 +63,11 @@ def help(argv):
     print "pre alpha - more coming soon"
 
 def statistics(argv):
+    time = datetime.timedelta(0)
     for entry in DATA:
-        time = datetime.datetime.strptime(entry['end'], DATEISOFORMAT) - datetime.datetime.strptime(entry['begin'], DATEISOFORMAT)
-        print "total time: " + str(time)
+        time += datetime.datetime.strptime(entry['end'], DATEISOFORMAT) - datetime.datetime.strptime(entry['begin'], DATEISOFORMAT)
+        
+    print "total time: " + str(time)
 
 def load_json(io):
     global DATA 
