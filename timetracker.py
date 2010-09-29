@@ -63,11 +63,21 @@ def help(argv):
     print "pre alpha - more coming soon"
 
 def statistics(argv):
-    time = datetime.timedelta(0)
+    time = {'total' : datetime.timedelta(0)}
+
     for entry in DATA:
-        time += datetime.datetime.strptime(entry['end'], DATEISOFORMAT) - datetime.datetime.strptime(entry['begin'], DATEISOFORMAT)
+        begin = datetime.datetime.strptime(entry['begin'], DATEISOFORMAT)
+        end = datetime.datetime.strptime(entry['end'], DATEISOFORMAT)
+        time.setdefault("%4i-%02i" % (begin.year, begin.month), datetime.timedelta(0))
+        time["%4i-%02i" % (begin.year, begin.month)] += end - begin
+
+    for timeslot, amount in time.items():
+        if timeslot != 'total':
+            time['total'] += amount
+            print "%10s: %8s" % (timeslot, str(amount))
         
-    print "total time: " + str(time)
+    print
+    print "total time: " + str(time['total'])
 
 def load_json(io):
     global DATA 
