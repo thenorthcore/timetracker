@@ -74,10 +74,17 @@ def statistics(argv):
     for timeslot, amount in time.items():
         if timeslot != 'total':
             time['total'] += amount
-            print "%10s: %8s" % (timeslot, str(amount))
+            print "%10s: %6s" % (timeslot, timedelta_to_string(amount))
         
     print
-    print "total time: " + str(time['total'])
+    print "total time:%7s" % timedelta_to_string(time['total'])
+
+def timedelta_to_string(td):
+    # timedelta just stores days, seconds and milliseconds...
+    hours = td.days * 24 + td.seconds // 3600
+    minutes = (td.seconds % 3600) // 60
+
+    return "%i:%02i" % (hours, minutes)
 
 def load_json(io):
     global DATA 
