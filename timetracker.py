@@ -14,7 +14,7 @@ DATEISOFORMAT = "%Y-%m-%d %H:%M:%S"
 def add(argv):
     global DATA
     
-    shortoptions = 't:b:e:c:'
+    shortoptions = 't:b:e:c:m:'
     longoptions = ["tag", "begin", "end", "comment"]
     
     try:
@@ -36,7 +36,7 @@ def add(argv):
                 begin = datetime.datetime.strptime(a, DATEINPUTFORMAT).isoformat(' ')
             elif o in ("-e", "--end"):
                 end = datetime.datetime.strptime(a, DATEINPUTFORMAT).isoformat(' ')
-            elif o in ("-c", "--comment"):
+            elif o in ("-m", "-c", "--comment"):
                 comment = a
             else:
                 print "unhandled option"
