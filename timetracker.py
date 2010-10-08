@@ -52,7 +52,7 @@ def add(argv):
 
 def show(argv):
     for entry in DATA:
-        print "%-10s %-26s %-26s %s" %(entry['tag'], entry['begin'], entry['end'], entry['comment'])
+        print "%-10s %-16s %-16s %s" %(entry['tag'], entry['begin'], entry['end'], entry['comment'])
 
 def delete(argv):
     print "delete entry"
@@ -65,7 +65,27 @@ def help(argv):
 def statistics(argv):
     time = {'total' : datetime.timedelta(0)}
 
+    shortoptions = 't:'
+    longoptions = ["tag"]
+
+    try:
+        opts, args = getopt.getopt(argv, shortoptions, longoptions)
+    except getopt.GetoptError, err:
+        print str(err)
+
+    tagfilter = ''
+
+    for o, a in opts:
+        if o in ("-t", "--tag"):
+            tagfilter = a
+            print "statistics filtered by tag: %s" % tagfilter
+            print
+
     for entry in DATA:
+        if tagfilter != '':
+            if entry['tag'] != tagfilter:
+                break
+            
         begin = datetime.datetime.strptime(entry['begin'], DATEISOFORMAT)
         end = datetime.datetime.strptime(entry['end'], DATEISOFORMAT)
         time.setdefault("%4i-%02i" % (begin.year, begin.month), datetime.timedelta(0))
@@ -77,7 +97,7 @@ def statistics(argv):
             print "%10s: %6s" % (timeslot, timedelta_to_string(amount))
         
     print
-    print "total time:%7s" % timedelta_to_string(time['total'])
+    print "total time:%7s %s" % (timedelta_to_string(time['total']), tagfilter)
 
 def timedelta_to_string(td):
     # timedelta just stores days, seconds and milliseconds...
